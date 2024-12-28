@@ -9,11 +9,61 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require "configs.lspconfig"
-    end,
+      local lspconfig = require('lspconfig')
+      -- Configure tsserver for JavaScript and TypeScript
+      lspconfig.ts_ls.setup({
+        on_attach = function(client, bufnr)
+          -- Add any additional configuration here
+          local bufopts = { noremap=true, silent=true, buffer=bufnr }
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+          vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
+          end,
+        })
+    end
   },
   {
-    'wuelnerdotexe/vim-astro'
+    'hrsh7th/nvim-cmp', -- Autocompletion plugin
+    dependencies = {
+        'hrsh7th/cmp-nvim-lsp', -- LSP completion source
+        'hrsh7th/cmp-buffer',   -- Buffer completion source
+        'hrsh7th/cmp-path',     -- Path completion source
+        'hrsh7th/cmp-vsnip',    -- Snippet completion source
+        'hrsh7th/vim-vsnip',    -- Snippet engine
+    },
+    config = function()
+        local cmp = require'cmp'
+        cmp.setup({
+            snippet = {
+                expand = function(args)
+                    vim.fn["vsnip#anonymous"](args.body)
+                end,
+            },
+            mapping = {
+                ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                ['<C-Space>'] = cmp.mapping.complete(),
+                ['<C-e>'] = cmp.mapping.close(),
+                ['<CR>'] = cmp.mapping.confirm({ select = true }),
+            },
+            sources = cmp.config.sources({
+                { name = 'nvim_lsp' },
+                { name = 'vsnip' },
+            }, {
+                { name = 'buffer' },
+            })
+        })
+    end
+  },
+  {
+    'wuelnerdotexe/vim-astro',
+    ft = { 'astro' },
+    config = function()
+      -- Set the Astro plugin options
+      vim.g.astro_typescript = 'enable'
+      require "lspconfig".astro.setup{}
+    end
   },
   {
     "lvimuser/lsp-inlayhints.nvim"
