@@ -1,6 +1,14 @@
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46/"
 vim.g.mapleader = " "
 
+-- Swap j and k keys
+vim.keymap.set('n', 'j', 'k', { noremap = true, silent = true })
+vim.keymap.set('n', 'k', 'j', { noremap = true, silent = true })
+
+-- Also swap in visual mode
+vim.keymap.set('v', 'j', 'k', { noremap = true, silent = true })
+vim.keymap.set('v', 'k', 'j', { noremap = true, silent = true })
+
 -- Set tab width to 4 spaces globally
 vim.opt.tabstop = 4        -- Number of spaces that a <Tab> counts for
 vim.opt.shiftwidth = 4     -- Number of spaces used for autoindent

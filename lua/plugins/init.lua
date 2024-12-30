@@ -4,8 +4,21 @@ return {
 		-- event = 'BufWritePre', -- uncomment for format on save
 		opts = require "configs.conform",
 	},
-
-	-- These are some examples, uncomment them if you want to see them work!
+	{
+		'lvimuser/lsp-inlayhints.nvim',
+		config = function()
+			require("lsp-inlayhints").setup({
+				inlay_hints = {
+					parameter_hints = {
+						show = true,
+					},
+					type_hints = {
+						show = true,
+					},
+				},
+			})
+		end,
+	},
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
@@ -101,6 +114,30 @@ return {
 					},
 				},
 			})
+
+			lspconfig.zls.setup({
+				on_attach = function(client, bufnr)
+					-- Enable inlay hints
+					require("lsp-inlayhints").on_attach(client, bufnr)
+
+					-- Keybindings for LSP features
+					local bufopts = { noremap = true, silent = true, buffer = bufnr }
+					vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+					vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+					vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+					vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
+				end,
+				settings = {
+					zls = {
+						inlayHints = {
+							enable = true,
+							typeHints = true,
+							parameterHints = true,
+							chainingHints = true,
+						},
+					},
+				},
+			})
 		end
 	},
 	{
@@ -146,6 +183,22 @@ return {
 					null_ls.builtins.formatting.prettier.with({
 						filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "astro" },
 					}),
+				},
+				on_attach = function(client, bufnr)
+					if client.supports_method("textDocument/formatting") then
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
+							buffer = bufnr,
+							callback = function()
+								vim.lsp.buf.format({ bufnr = bufnr })
+							end,
+						})
+					end
+				end,
+			})
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.formatting.zigfmt, -- Use zig fmt
 				},
 				on_attach = function(client, bufnr)
 					if client.supports_method("textDocument/formatting") then
@@ -248,6 +301,32 @@ return {
 			end
 		end,
 	},
+	{
+		'mfussenegger/nvim-dap',
+		dependencies = { 'rcarriga/nvim-dap-ui' },
+		config = function()
+			local dap = require("dap")
+			dap.adapters.lldb = {
+				type = "executable",
+				command = "lldb-dap", -- Ensure lldb-vscode is in PATH
+				name = "lldb",
+			}
+			dap.configurations.zig = {
+				{
+					name = "Launch Zig Program",
+					type = "lldb",
+					request = "launch",
+					program = function()
+						return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+					end,
+					cwd = "${workspaceFolder}",
+					stopOnEntry = false,
+					args = {},
+				},
+			}
+			require('dapui').setup()
+		end,
+	},
 
 	{
 		'rcarriga/nvim-dap-ui',
@@ -273,6 +352,56 @@ return {
 			})
 		end
 	},
+	{
+		'huggingface/llm.nvim',
+		dependencies = {
+			'nvim-lua/plenary.nvim', -- Required dependency
+		},
+		config = function()
+			local llm = require('llm')
+
+			llm.setup({
+				api_token = "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", -- cf Install paragraph
+				model = "bigcode/starcoder2-15b",        -- the model ID, behavior depends on backend
+				backend = "huggingface",                 -- backend ID, "huggingface" | "ollama" | "openai" | "tgi"
+				url = "https://stack.dataportraits.org/overlap", -- the http url of the backend
+				tokens_to_clear = { "<|endoftext|>" },   -- tokens to remove from the model's output
+				-- parameters that are added to the request body, values are arbitrary, you can set any field:value pair here it will be passed as is to the backend
+				request_body = {
+					parameters = {
+						max_new_tokens = 60,
+						temperature = 0.2,
+						top_p = 0.95,
+					},
+				},
+				-- set this if the model supports fill in the middle
+				fim = {
+					enabled = true,
+					prefix = "<fim_prefix>",
+					middle = "<fim_middle>",
+					suffix = "<fim_suffix>",
+				},
+				debounce_ms = 150,
+				accept_keymap = "<Tab>",
+				dismiss_keymap = "<S-Tab>",
+				tls_skip_verify_insecure = false,
+				-- llm-ls configuration, cf llm-ls section
+				lsp = {
+					bin_path = nil,
+					host = nil,
+					port = nil,
+					cmd_env = nil, -- or { LLM_LOG_LEVEL = "DEBUG" } to set the log level of llm-ls
+					version = "0.5.3",
+				},
+				tokenizer = nil,         -- cf Tokenizer paragraph
+				context_window = 1024,   -- max number of tokens for the context window
+				enable_suggestions_on_startup = true,
+				enable_suggestions_on_files = "*", -- pattern matching syntax to enable suggestions on specific files, either a string or a list of strings
+				disable_url_path_completion = false, -- cf Backend
+			})
+		end,
+	},
+
 	-- {
 	-- 	"nvim-treesitter/nvim-treesitter",
 	-- 	opts = {
