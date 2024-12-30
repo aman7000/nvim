@@ -5,6 +5,16 @@ return {
 		opts = require "configs.conform",
 	},
 	{
+		"folke/which-key.nvim",
+		event = "VeryLazy", -- Ensure it's loaded as early as possible
+		config = function()
+			local wk = require("which-key")
+			wk.setup({
+				-- Add your custom which-key configuration here if needed
+			})
+		end,
+	},
+	{
 		'lvimuser/lsp-inlayhints.nvim',
 		config = function()
 			require("lsp-inlayhints").setup({
