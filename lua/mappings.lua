@@ -7,6 +7,8 @@ local map = vim.keymap.set
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "ne", "<ESC>")
 
+map('n', '<leader>a', ':Dashboard<CR>', { noremap = true, silent = true }, { desc = "Dashboard" })
+
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
 -- Nvim DAP

@@ -32,6 +32,7 @@ return {
 					},
 					shortcut = {
 						{ desc = ' Files', group = 'Label', action = 'Telescope find_files', key = 'f' },
+						{ desc = ' Explore', group = 'Label', action = 'NvimTreeFocus', key = 'e' },
 						{ desc = ' Config', group = 'Label', action = 'edit $MYVIMRC', key = 'c' },
 						{ desc = ' Quit', group = '@macro', action = 'qa', key = 'q' },
 					},
