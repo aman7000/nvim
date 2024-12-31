@@ -399,11 +399,11 @@ return {
 			local llm = require('llm')
 
 			llm.setup({
-				api_token = "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", -- cf Install paragraph
-				model = "bigcode/starcoder2-15b",        -- the model ID, behavior depends on backend
-				backend = "huggingface",                 -- backend ID, "huggingface" | "ollama" | "openai" | "tgi"
+				api_token = nil,                     -- cf Install paragraph
+				model = "bigcode/starcoder2-15b",    -- the model ID, behavior depends on backend
+				backend = "huggingface",             -- backend ID, "huggingface" | "ollama" | "openai" | "tgi"
 				url = "https://stack.dataportraits.org/overlap", -- the http url of the backend
-				tokens_to_clear = { "<|endoftext|>" },   -- tokens to remove from the model's output
+				tokens_to_clear = { "<|endoftext|>" }, -- tokens to remove from the model's output
 				-- parameters that are added to the request body, values are arbitrary, you can set any field:value pair here it will be passed as is to the backend
 				request_body = {
 					parameters = {
