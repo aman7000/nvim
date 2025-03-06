@@ -1,13 +1,6 @@
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46/"
 vim.g.mapleader = " "
 
--- Swap j and k keys
-vim.keymap.set('n', 'j', 'k', { noremap = true, silent = true })
-vim.keymap.set('n', 'k', 'j', { noremap = true, silent = true })
-
--- Also swap in visual mode
-vim.keymap.set('v', 'j', 'k', { noremap = true, silent = true })
-vim.keymap.set('v', 'k', 'j', { noremap = true, silent = true })
 
 -- Set tab width to 4 spaces globally
 vim.opt.tabstop = 4        -- Number of spaces that a <Tab> counts for
@@ -60,3 +53,14 @@ require "nvchad.autocmds"
 vim.schedule(function()
 	require "mappings"
 end)
+
+vim.opt.number = true         -- Show the absolute line number for the current line
+vim.opt.relativenumber = true -- Show relative line numbers for all other lines
+
+vim.opt.cursorline = true     -- Highlight the current row
+vim.opt.cursorcolumn = true   -- Highlight the current column
+
+vim.cmd([[
+    highlight CursorLine cterm=NONE ctermbg=darkgray guibg=#2E2E2E
+    highlight CursorColumn cterm=NONE ctermbg=darkgray guibg=#2E2E2E
+]])

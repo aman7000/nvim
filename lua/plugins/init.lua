@@ -16,7 +16,7 @@ return {
 	},
 	{
 		'nvimdev/dashboard-nvim',
-		event = 'VimEnter',
+event = 'VimEnter',
 		config = function()
 			require('dashboard').setup {
 				-- config
@@ -124,6 +124,28 @@ return {
 				},
 			})
 
+			-- Configure gopls
+			lspconfig.gopls.setup({
+				on_attach = function(client, bufnr)
+					-- Enable keybindings for LSP features
+					local bufopts = { noremap = true, silent = true, buffer = bufnr }
+					vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+					vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+					vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+					vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, bufopts)
+					vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
+				end,
+				settings = {
+					gopls = {
+						analyses = {
+							unusedparams = true,
+							shadow = true,
+						},
+						staticcheck = true,
+					},
+				},
+			})
+
 			local rt = require("rust-tools")
 
 			rt.setup({
@@ -221,6 +243,22 @@ return {
 					null_ls.builtins.formatting.prettier.with({
 						filetypes = { "javascript", "typescript", "javascriptreact", "typescriptreact", "astro" },
 					}),
+				},
+				on_attach = function(client, bufnr)
+					if client.supports_method("textDocument/formatting") then
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							group = vim.api.nvim_create_augroup("LspFormatting", { clear = true }),
+							buffer = bufnr,
+							callback = function()
+								vim.lsp.buf.format({ bufnr = bufnr })
+							end,
+						})
+					end
+				end,
+			})
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.formatting.gofumpt, -- Use gofumpt for formatting
 				},
 				on_attach = function(client, bufnr)
 					if client.supports_method("textDocument/formatting") then
@@ -341,6 +379,25 @@ return {
 	},
 	{
 		'mfussenegger/nvim-dap',
+		config = function()
+			local dap = require('dap')
+			dap.adapters.go = {
+				type = "server",
+				host = "127.0.0.1",
+				port = 38697,
+			}
+			dap.configurations.go = {
+				{
+					type = "go",
+					name = "Debug",
+					request = "launch",
+					program = "${file}",
+				},
+			}
+		end,
+	},
+	{
+		'mfussenegger/nvim-dap',
 		dependencies = { 'rcarriga/nvim-dap-ui' },
 		config = function()
 			local dap = require("dap")
@@ -439,6 +496,22 @@ return {
 			})
 		end,
 	},
+	{
+		'nvim-treesitter/nvim-treesitter',
+		build = ':TSUpdate',
+		config = function()
+			require('nvim-treesitter.configs').setup({
+				ensure_installed = { 'vim', 'lua', 'vimdoc', 'typescript', 'svelte', 'html', 'css', 'go' }, -- Specify the languages
+				highlight = {
+					enable = true,                                                              -- Enable Tree-sitter highlighting
+					additional_vim_regex_highlighting = false,                                  -- Use only Tree-sitter for highlighting
+				},
+				indent = {
+					enable = true,
+				},
+			})
+		end,
+	}
 
 	-- {
 	-- 	"nvim-treesitter/nvim-treesitter",

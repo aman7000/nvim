@@ -3,11 +3,20 @@ require "nvchad.mappings"
 -- add yours here
 
 local map = vim.keymap.set
+-- Swap j and k keys
+-- map('n', 'j', 'k', { noremap = true, silent = true })
+-- map('n', 'k', 'j', { noremap = true, silent = true })
+
+-- Also swap in visual mode
+-- map('v', 'j', 'k', { noremap = true, silent = true })
+-- map('v', 'k', 'j', { noremap = true, silent = true })
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "ne", "<ESC>")
 
 map('n', '<leader>a', ':Dashboard<CR>', { noremap = true, silent = true }, { desc = "Dashboard" })
+
+
 
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 
