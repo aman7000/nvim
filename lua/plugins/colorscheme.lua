@@ -6,18 +6,18 @@ return {
     --         colorscheme = "crayon",
     --     } },
     -- },
-    -- {
-    --     "embark-theme/vim",
-    --     { "LazyVim/LazyVim", opts = {
-    --         colorscheme = "embark",
-    --     } },
-    -- },
     {
-        "vim-scripts/strange",
+        "embark-theme/vim",
         { "LazyVim/LazyVim", opts = {
-            colorscheme = "strange",
+            colorscheme = "embark",
         } },
     },
+    -- {
+    --     "vim-scripts/strange",
+    --     { "LazyVim/LazyVim", opts = {
+    --         colorscheme = "strange",
+    --     } },
+    -- },
     -- {
     --     "pineapplegiant/spaceduck",
     --     { "LazyVim/LazyVim", opts = {

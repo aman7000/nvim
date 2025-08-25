@@ -27,10 +27,10 @@ vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter" }, {
         vim.api.nvim_set_hl(0, "LspInlayHint", { bg = "NONE" }) -- Omit fg to keep ayu's default; add if visibility is poor, e.g., fg = "#939293"
         vim.api.nvim_set_hl(0, "String", { bg = "NONE" }) -- New: Remove bg from strings
         -- Set lighter background for cursor line (adjust #3a3a3a to your preferred lighter hex)
-        vim.api.nvim_set_hl(0, "CursorLine", { bg = "#3a3a3a" })
+        -- vim.api.nvim_set_hl(0, "CursorLine", { bg = "#3a3a3a" })
 
         -- Set lighter background for cursor column (same as above)
-        vim.api.nvim_set_hl(0, "CursorColumn", { bg = "#3a3a3a" })
+        -- vim.api.nvim_set_hl(0, "CursorColumn", { bg = "#3a3a3a" })
     end,
 })
 
