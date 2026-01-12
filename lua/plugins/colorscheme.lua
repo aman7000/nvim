@@ -6,12 +6,12 @@ return {
     --         colorscheme = "crayon",
     --     } },
     -- },
-    {
-        "embark-theme/vim",
-        { "LazyVim/LazyVim", opts = {
-            colorscheme = "embark",
-        } },
-    },
+    -- {
+    --     "embark-theme/vim",
+    --     { "LazyVim/LazyVim", opts = {
+    --         colorscheme = "embark",
+    --     } },
+    -- },
     -- {
     --     "vim-scripts/strange",
     --     { "LazyVim/LazyVim", opts = {
@@ -24,12 +24,12 @@ return {
     --         colorscheme = "spaceduck",
     --     } },
     -- },
-    -- {
-    --     "ellisonleao/gruvbox.nvim",
-    -- { "LazyVim/LazyVim", opts = {
-    --     colorscheme = "gruvbox",
-    -- } },
-    -- },
+    {
+        "ellisonleao/gruvbox.nvim",
+        { "LazyVim/LazyVim", opts = {
+            colorscheme = "gruvbox",
+        } },
+    },
     -- {
     --     "ricardoraposo/gruvbox-minor.nvim",
     --     { "LazyVim/LazyVim", opts = {

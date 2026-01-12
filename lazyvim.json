@@ -1,7 +1,10 @@
 {
   "extras": [
+    "lazyvim.plugins.extras.ai.avante",
+    "lazyvim.plugins.extras.ai.codeium",
     "lazyvim.plugins.extras.dap.core",
     "lazyvim.plugins.extras.dap.nlua",
+    "lazyvim.plugins.extras.editor.overseer",
     "lazyvim.plugins.extras.formatting.prettier",
     "lazyvim.plugins.extras.lang.ansible",
     "lazyvim.plugins.extras.lang.docker",
@@ -22,7 +25,7 @@
     "lazyvim.plugins.extras.util.gitui"
   ],
   "news": {
-    "NEWS.md": "10960"
+    "NEWS.md": "11866"
   },
   "version": 8
 }
